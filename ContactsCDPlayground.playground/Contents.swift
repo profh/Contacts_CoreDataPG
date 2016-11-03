@@ -4,6 +4,7 @@ import CoreData
 let entityName = "Contact"
 let coreDataStack = CoreDataStack()
 
+
 // saving data with CoreData
 let contactEntity = NSEntityDescription.entityForName(entityName, inManagedObjectContext: coreDataStack.context)
 
@@ -39,4 +40,21 @@ if let results = try? coreDataStack.context.executeFetchRequest(fetchRequest) as
   results[2].name
 } else {
   print("There was an error getting the results")
+}
+
+
+// filtering data with predicates (more on predicates at http://nshipster.com/nspredicate/)
+
+let predicate = NSPredicate(format: "name = 'Batman'")
+//let predicate = NSPredicate(format: "name contains 'm'")
+//let predicate = NSPredicate(format: "name beginswith[c] 'bat'")  // [c] makes case-insensitive
+//let predicate = NSPredicate(format: "name endswith 'man'")
+//let predicate = NSPredicate(format: "name like 'B*'")  // use ? if match only 1 char
+fetchRequest.predicate = predicate
+
+if let resultsBM = try? coreDataStack.context.executeFetchRequest(fetchRequest) as! [Contact] {
+  resultsBM.count
+  resultsBM[0].name
+} else {
+  print("There is no Batman in the database")
 }
